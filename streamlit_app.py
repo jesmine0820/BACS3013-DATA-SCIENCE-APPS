@@ -1,11 +1,9 @@
 import pandas as pd
 import numpy as np
-from scipy import stats
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.cluster import KMeans
-import pickle
 import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -37,9 +35,18 @@ df = df[df['UnitPrice'] > 0]
 df.reset_index(drop=True, inplace=True)
 
 # Remove Outliers by using Z-Score
-z_Score = np.abs(stats.zscore(df[['Quantity', 'UnitPrice', 'TotalSales']]))
+# Calculate the mean and standard deviation for each column
+mean = df[['Quantity', 'UnitPrice', 'TotalSales']].mean()
+std = df[['Quantity', 'UnitPrice', 'TotalSales']].std()
+
+# Calculate the Z-scores manually
+z_score = (df[['Quantity', 'UnitPrice', 'TotalSales']] - mean) / std
+
+# Set the threshold
 threshold = 3
-df = df[(z_Score < threshold).all(axis=1)]
+
+# Remove outliers based on the Z-score threshold
+df = df[(z_score.abs() < threshold).all(axis=1)]
 
 # Normalize continuous data
 numerical_Columns = ['Quantity', 'UnitPrice', 'Year']
