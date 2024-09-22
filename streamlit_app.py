@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Data Loading
-df = pd.read_csv('/workspaces/BACS3013-DATA-SCIENCE-APPS/online_Retail.csv', encoding='latin1')
+df = pd.read_csv('online_Retail.csv', encoding='latin1')
 
 # Calculate Total Sales
 df['TotalSales'] = df['Quantity'] * df['UnitPrice']
